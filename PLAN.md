@@ -21,5 +21,5 @@
 - [x] Game design and implementation
 - [x] Automated browser acceptance and screenshots
 - [x] Dedicated GitHub repository created
-- [ ] Initial governed commit and push
-- [ ] GitHub Pages deployment and live verification
+- [x] Initial governed commit and push
+- [x] GitHub Pages deployment and live verification
