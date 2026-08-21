@@ -57,6 +57,61 @@ The game began with this operator prompt, preserved here verbatim:
 >
 > Lets make this as an HTML web app and make it look good.
 
+## Complete operator-input ledger
+
+This is the complete 42-message human-input sequence from the initial brief through the instruction that led to the first verified public deployment. It is **content-normalized rather than byte-verbatim**: spelling and tone are retained where useful, but private screenshot origins, an email address, a session identifier, operational paths, policy hashes, and shell output are replaced with descriptive brackets. No message is omitted. The full initial brief remains verbatim above.
+
+“Symbolic English” compresses each input into an intent expression: `MAKE` creates, `REQUIRE` adds a constraint, `PROVIDE` supplies evidence or an asset, `QUERY` asks for information, `CORRECT` repairs prior input, `APPROVE` authorizes a proposed step, and `REPORT` supplies observed behavior.
+
+The **token stage** is the cumulative percentage of non-reused token work consumed through the first model response that could incorporate that message. The denominator is 3,272,753 uncached-input-plus-output tokens from the initial prompt through the first verified deployment. It excludes cached input so repeated context does not dominate the chronology. Percentages are approximate and show *when* an instruction entered the work, not how many tokens that instruction alone caused.
+
+| # | Token stage | Public-safe operator input | Symbolic English |
+| ---: | ---: | --- | --- |
+| 1 | 0.3% | Full game-design prompt reproduced above. | `MAKE HTML_GAME(rows=3..8, bank=6, exact_hidden_answer, carry_forward, distractors, hints=[remove_distractor, reveal_1, reveal_2], attractive_ui)` |
+| 2 | 4.1% | “I just dropped two photos … of the chalkboard mockup via taildorp” | `PROVIDE visual_reference(chalkboard_photos=2)` |
+| 3 | 4.1% | “taildrop” | `CORRECT term(taildorp -> taildrop)` |
+| 4 | 10.5% | “Let me know when I have a link to test” | `REQUEST deliver(test_url)` |
+| 5 | 14.7% | “status?” | `QUERY progress()` |
+| 6 | 15.1% | `[private screenshot URL]` | `PROVIDE evidence(editor_screenshot)` |
+| 7 | 18.9% | A stray backtick. | `NO_OP accidental_character` |
+| 8 | 22.0% | “Excellent. Lets make it so that we do not need to press enter/submit if the letters are typed out” | `REQUIRE auto_check(full_guess) AND NOT require_submit` |
+| 9 | 22.5% | “also it would be good to see list of previous attempts on a word” | `REQUIRE show(previous_failed_attempts)` |
+| 10 | 28.4% | `[private screenshot URL] if i get to a full attempt and its wrong and … i enter a new letter it should auto clear the word` | `REQUIRE rejected_full_guess + next_letter -> clear_then_start(next_guess)` |
+| 11 | 29.3% | `[private screenshot URL] we should explain how we use agents.md differently, and how yours is used` | `REQUEST explain(AGENTS.md, global_vs_project)` |
+| 12 | 29.5% | “Did you change the behavior so that when its full and it rejects im able to continue with starting over with a new letter entry?” | `QUERY implemented(type_to_replace_after_rejection)` |
+| 13 | 36.8% | “Ok. Good. I wasnt aware we had so many agents.mds - are they all indexed somewhere?” | `ACK behavior; QUERY index(all_AGENTS.md)` |
+| 14 | 44.0% | “are the global codex workspace instructions currently compiled at session invocation from a federated typed reference registry?” | `QUERY boot_context := compile(federated_typed_refs, session_invocation)` |
+| 15 | 44.3% | “are there receipts for the inputs and outputs of each compiler invocation that we can inspect within a log?” | `QUERY observable_receipts(compiler.input, compiler.output)` |
+| 16 | 45.7% | “are these up to date and complete? For what agents/UIDs/sessions does the compiler currently work?” | `QUERY compiler_coverage(freshness, completeness, principals, sessions)` |
+| 17 | 48.3% | Asked what the compiler produced for a recently spawned Claude session and proposed kernels for persistent work with compilers for delegates. | `INSPECT compile_output(delegate_session); PROPOSE persistent=>kernel, delegate=>compiler` |
+| 18 | 51.1% | Asked whether Grok Cockpit's Delegation API work was visible; directed compiler-first support for delegates and kernel-based context for persistent Codex/Claude agents. | `ALIGN compiler -> delegates_first; persistent_agents -> kernel_using(delegates)` |
+| 19 | 53.0% | “how will this work with AgentIdentityV2 so the delegates are actually able to do work?” | `QUERY delegate_execution(authority=AgentIdentityV2)` |
+| 20 | 57.6% | “whats left thats unfinished as far as the Dr. Mulden assignment?” | `QUERY remaining(class_assignment)` |
+| 21 | 57.7% | “Yes, Hulden, my typo” | `CORRECT instructor_name(Mulden -> Hulden)` |
+| 22 | 58.6% | Supplied the complete instructor assignment: dedicated directory, live Git and per-turn commits, maintained `AGENTS.md`, plan before code, create/pull a GitHub project, test iteratively, push, publish with GitHub Pages, and submit both links plus comments. | `REQUIRE assignment(dedicated_repo, live_git, per_turn_commits, maintain_AGENTS, plan_then_code, test_loop, push_GitHub, deploy_Pages, submit=[repo_url, pages_url, comments])` |
+| 23 | 58.9% | Asked to locate an existing GitHub token through derived events, place it in the vault, and use it correctly. | `REQUEST credential_flow(find_via_derived_events -> vault -> scoped_use)` |
+| 24 | 72.3% | Rejected the school-linked credential and selected a different GitHub account email `[email redacted]`. | `SELECT github_identity(personal_account) NOT school_account` |
+| 25 | 72.4% | “it expired i need a new one” | `REPORT credential(expired); REQUIRE credential(new)` |
+| 26 | 72.5% | “all set” | `SIGNAL credential_setup_complete` |
+| 27 | 73.0% | “all set” | `SIGNAL account_setup_complete` |
+| 28 | 77.5% | “yes go ahead” | `APPROVE proposed_publication_step` |
+| 29 | 79.9% | “yes” | `APPROVE proposed_followup_step` |
+| 30 | 86.2% | “overrite anti restart api.” | `REQUEST change(anti_restart_policy)` |
+| 31 | 89.4% | “lets change the sudo policy” | `REQUEST change(sudo_policy)` |
+| 32 | 89.4% | Shared a failed policy-install command where editor-inserted line breaks separated required arguments. | `REPORT failure(command_wrapped -> argument_split + command_not_found)` |
+| 33 | 89.5% | Shared a second failed attempt with the path and hash split across lines, then asked “good?” | `REPORT failure(retry_wrapped); QUERY success?` |
+| 34 | 89.5% | “dude why dont agents get this” | `REPORT recurring_agent_instruction_failure(frustration=high)` |
+| 35 | 89.5% | Explained that VS Code—not the operator—was inserting the breaks and required agents to know this globally. | `ASSERT cause=editor_auto_wrap NOT operator; REQUIRE global_awareness` |
+| 36 | 90.0% | “we need global context repair so agents stop doing this to me” | `REQUIRE repair(global_context, prevent_wrapped_commands)` |
+| 37 | 90.1% | Asked for a quoted or EOF-encased form that could be pasted as a whole. | `REQUEST robust_paste(format=quoted_or_heredoc)` |
+| 38 | 90.4% | `[private screenshot URL] seems like it hung it never returned the cursor` | `REPORT suspected_hang(heredoc, cursor_not_returned)` |
+| 39 | 90.7% | “this looks like its hanging too: [private screenshot URL]” | `REPORT suspected_hang(retry)` |
+| 40 | 91.1% | “Done. There we go that worked. This is how you should instruct agents to do this in global context.” | `VERIFY robust_paste=PASS; REQUIRE encode_as_global_agent_guidance` |
+| 41 | 91.4% | “that was a blocker, now what is the list of ordered priorities?” | `RESOLVE blocker; QUERY ordered_priorities()` |
+| 42 | 91.7% | “Continue end to end” | `DIRECT execute_remaining_pipeline(until=verified_public_deployment)` |
+
+The remaining 8.3% of non-reused token work occurred after message 42: the agent completed the governed commit, pushed the repository, configured and checked GitHub Pages, updated the project plan, and verified the live game. This ledger also makes the detour visible: messages 13–21 concern the context compiler and delegate architecture rather than Letter Carry itself, while messages 30–40 repair a publication-policy and command-pasting blocker. They belong in the end-to-end transcript but not in the narrower direct game-building telemetry below.
+
 ## Direct game-building telemetry
 
 These measurements cover only the four direct game-building intervals: the initial implementation, automatic checking plus attempt history, type-to-replace, and final behavior confirmation. They exclude idle gaps, unrelated substrate discussions, GitHub account setup, publication-policy repair, and deployment work.
