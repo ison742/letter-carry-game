@@ -171,16 +171,17 @@
     for (let i = 0; i < 3; i += 1) { const pip = document.createElement("i"); if (i < remaining) pip.className = "is-available"; els.hintPips.appendChild(pip); }
     els.hintPips.setAttribute("aria-label", `${remaining} ${remaining === 1 ? "hint" : "hints"} remaining`);
   }
-  function selectTile(tileId) {
+  function clearFullGuessForReplacement() {
+    if (state.slots.some((value) => value === null)) return false;
+    state.slots = state.slots.map((tile, index) => state.locked.has(index) ? tile : null);
+    return true;
+  }
+  function selectTile(tileId, clearedPrevious = false) {
     if (state.animating || state.eliminated.has(tileId) || state.slots.includes(tileId)) return;
     let position = state.slots.findIndex((value) => value === null);
-    let clearedPrevious = false;
     if (position === -1) {
-      state.slots = state.slots.map((tile, index) => state.locked.has(index) ? tile : null);
+      clearedPrevious = clearFullGuessForReplacement();
       position = state.slots.findIndex((value) => value === null);
-      if (position !== -1) {
-        clearedPrevious = true;
-      }
     }
     if (position === -1) return setFeedback("Your row is full. Remove a letter to try another.", "error");
     state.slots[position] = tileId;
@@ -251,8 +252,10 @@
     }
   }
   function chooseByKeyboard(letter) {
+    const clearedPrevious = clearFullGuessForReplacement();
     const tile = state.tiles.find((candidate) => candidate.letter === letter && !state.slots.includes(candidate.id) && !state.eliminated.has(candidate.id));
-    if (tile) selectTile(tile.id);
+    if (tile) return selectTile(tile.id, clearedPrevious);
+    if (clearedPrevious) setFeedback("Previous guess cleared — building a new one.");
   }
   function showWin() {
     const remaining = 3 - state.hintsUsed;

@@ -70,6 +70,17 @@ def run() -> None:
         expect(page.locator("#attempt-history")).to_be_visible()
         expect(page.locator(".attempt-item")).to_have_count(1)
         expect(page.locator(".attempt-word")).to_contain_text(first[::-1])
+
+        used_letter = first[0]
+        page.keyboard.press(used_letter)
+        expect(page.locator('.word-row.is-active .answer-slot.is-filled')).to_have_count(1)
+        expect(page.locator(f'.letter-tile.is-selected[data-letter="{used_letter}"]')).to_have_count(1)
+        expect(page.locator("#game-status")).to_contain_text("building a new one")
+
+        page.locator("#clear-button").click()
+        for letter in reversed(first):
+            page.locator(f'.letter-tile[data-letter="{letter}"]').click()
+        expect(page.locator("#game-status")).to_contain_text("isn’t the hidden word")
         distractor = next(tile["letter"] for tile in game_state(page)["tiles"] if not tile["carry"] and tile["letter"] not in first)
         page.keyboard.press(distractor)
         expect(page.locator('.word-row.is-active .answer-slot.is-filled')).to_have_count(1)
