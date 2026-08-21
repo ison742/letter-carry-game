@@ -57,30 +57,30 @@ The game began with this operator prompt, preserved here verbatim:
 >
 > Lets make this as an HTML web app and make it look good.
 
-## End-to-end project telemetry
+## Direct game-building telemetry
 
-The following measurements stop at the first verified public deployment, before this case-study README was requested.
+These measurements cover only the four direct game-building intervals: the initial implementation, automatic checking plus attempt history, type-to-replace, and final behavior confirmation. They exclude idle gaps, unrelated substrate discussions, GitHub account setup, publication-policy repair, and deployment work.
 
 | Measure | Result |
 | --- | ---: |
-| Wall-clock span | 19 h 54 m 51 s |
-| Human operator messages | 42 |
-| Direct product/delivery requirement messages | 6 |
+| Active working time | 43 m 06 s |
+| Active agent turns | 4 |
+| Operator product inputs | 5 |
 | Manual gameplay refinements after the initial brief | 3 |
-| Total tokens | 12,789,526 |
-| Input tokens | 12,759,274 |
-| Cached input tokens | 12,499,072 (97.96% of input) |
-| Uncached input tokens | 260,202 |
-| Output tokens | 30,252 |
-| Reasoning tokens | 8,678 (included in output) |
+| Uncached input tokens | 811,098 |
+| Output tokens | 86,513 |
+| Non-reused input + output | 897,611 |
+| Cached input traffic | 18,964,480 (95.90% of input) |
+| Raw processed token volume | 19,877,686 |
+| Reasoning tokens | 21,019 (included in output) |
 
 ### How the counts were produced
 
-The session substrate keeps an append-only transcript with timestamps, message roles, tool receipts, and cumulative token ledgers. The interval begins at the initial game prompt and ends when the repository, exact commit, and public Pages behavior were verified. The transcript contained 44 user-role records; two were automatically injected environment/context packets, leaving **42 human operator messages**. Of those, six carried direct game or delivery requirements: the initial brief, the visual references, the three follow-up gameplay changes, and the course publication brief.
+The session substrate keeps an append-only transcript with timestamps, task boundaries, message roles, tool receipts, and a per-response `last_token_usage` ledger. Active time is the sum of the four direct intervals from their prompt/task start to `task_complete`; idle time between turns is not counted. The five product inputs are the initial brief, the chalkboard references, and the three follow-up gameplay changes.
 
-The nearly 20-hour span is elapsed wall time, not active compute time. It includes overnight gaps, account setup, infrastructure discussion, operator availability, and deployment-policy repair. Likewise, the token total includes system instructions, cached context, tool payloads, and an unrelated architecture discussion that occurred in the same long-running thread. It should not be presented as the irreducible cost of this small game.
+Token figures are sums of `last_token_usage` records inside those same four intervals, so compaction resets in the cumulative counter cannot distort the result. One legacy event reported 15,595 total tokens without a category breakdown; it is included only in raw processed volume. “Raw processed” is not the same as newly authored content: tool-driven agents repeatedly send their context, and 95.90% of the measured input was cache-served. The more intuitive fresh-work figure is **897,611 non-reused input plus output tokens**.
 
-The runtime receipt exposes token usage but no defensible billed **USD** amount. This work ran in a subscription Codex session rather than as a directly metered API request, and cached-input pricing cannot be inferred safely from the transcript. For that reason, this report gives the auditable token cost and does not invent a dollar figure.
+The runtime receipt exposes token traffic but no defensible billed **USD** amount. This ran in a subscription Codex session rather than as a directly metered API request, and cached-input pricing cannot be inferred safely from the transcript. The table therefore reports reproducible traffic, not an invented dollar charge.
 
 ## What the substrate contributed
 
@@ -95,7 +95,7 @@ The interesting part was that the same session carried the work from a rough ora
 5. The published branch SHA was read back from GitHub.
 6. A browser drove the local and public versions, checking rejection history, type-to-replace, automatic submission, carry-over rules, hints, restart, full completion, mobile overflow, and console errors.
 
-That made failures more diagnosable, but it also exposed a tradeoff: governance and large persistent contexts are expensive in tokens. The 97.96% cache share softened repeated context processing, yet the raw total remains much larger than the application source. A useful next experiment would isolate the game task in its own thread and compare the same acceptance standard with a compact delegate context.
+That made failures more diagnosable, but it also exposed a tradeoff: governance and large persistent contexts create substantial token traffic. The 95.90% cache share softened repeated context processing, yet the raw volume remains much larger than the application source. A useful next experiment would isolate the game task in its own thread and compare the same acceptance standard with a compact delegate context.
 
 ## Chat excerpts
 
