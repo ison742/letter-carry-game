@@ -57,60 +57,26 @@ The game began with this operator prompt, preserved here verbatim:
 >
 > Lets make this as an HTML web app and make it look good.
 
-## Complete operator-input ledger
+## Game-making operator-input view
 
-This is the complete 42-message human-input sequence from the initial brief through the instruction that led to the first verified public deployment. It is **content-normalized rather than byte-verbatim**: spelling and tone are retained where useful, but private screenshot origins, an email address, a session identifier, operational paths, policy hashes, and shell output are replaced with descriptive brackets. No message is omitted. The full initial brief remains verbatim above.
+This is a **task-derived view**, not a dump of the surrounding conversation. An operator message is included only when it directly specifies, supplies visual evidence for, tests, or verifies Letter Carry. Messages about other projects, agent architecture, credentials, service policy, and shell/editor troubleshooting are excluded even if they occurred in the same long-running chat. Automatic environment and instruction packets are excluded as well.
 
-“Symbolic English” compresses each input into an intent expression: `MAKE` creates, `REQUIRE` adds a constraint, `PROVIDE` supplies evidence or an asset, `QUERY` asks for information, `CORRECT` repairs prior input, `APPROVE` authorizes a proposed step, and `REPORT` supplies observed behavior.
+“Symbolic English” compresses each included input into an intent expression. The **token stage** is the cumulative percentage of the 897,611 non-reused tokens in the four direct game-building intervals through the first response that could use that input. It shows when an instruction entered the scoped work, not the cost of that message alone.
 
-The **token stage** is the cumulative percentage of non-reused token work consumed through the first model response that could incorporate that message. The denominator is 3,272,753 uncached-input-plus-output tokens from the initial prompt through the first verified deployment. It excludes cached input so repeated context does not dominate the chronology. Percentages are approximate and show *when* an instruction entered the work, not how many tokens that instruction alone caused.
-
-| # | Token stage | Public-safe operator input | Symbolic English |
+| # | Token stage | Public-safe game-making input | Symbolic English |
 | ---: | ---: | --- | --- |
-| 1 | 0.3% | Full game-design prompt reproduced above. | `MAKE HTML_GAME(rows=3..8, bank=6, exact_hidden_answer, carry_forward, distractors, hints=[remove_distractor, reveal_1, reveal_2], attractive_ui)` |
-| 2 | 4.1% | “I just dropped two photos … of the chalkboard mockup via taildorp” | `PROVIDE visual_reference(chalkboard_photos=2)` |
-| 3 | 4.1% | “taildrop” | `CORRECT term(taildorp -> taildrop)` |
-| 4 | 10.5% | “Let me know when I have a link to test” | `REQUEST deliver(test_url)` |
-| 5 | 14.7% | “status?” | `QUERY progress()` |
-| 6 | 15.1% | `[private screenshot URL]` | `PROVIDE evidence(editor_screenshot)` |
-| 7 | 18.9% | A stray backtick. | `NO_OP accidental_character` |
-| 8 | 22.0% | “Excellent. Lets make it so that we do not need to press enter/submit if the letters are typed out” | `REQUIRE auto_check(full_guess) AND NOT require_submit` |
-| 9 | 22.5% | “also it would be good to see list of previous attempts on a word” | `REQUIRE show(previous_failed_attempts)` |
-| 10 | 28.4% | `[private screenshot URL] if i get to a full attempt and its wrong and … i enter a new letter it should auto clear the word` | `REQUIRE rejected_full_guess + next_letter -> clear_then_start(next_guess)` |
-| 11 | 29.3% | `[private screenshot URL] we should explain how we use agents.md differently, and how yours is used` | `REQUEST explain(AGENTS.md, global_vs_project)` |
-| 12 | 29.5% | “Did you change the behavior so that when its full and it rejects im able to continue with starting over with a new letter entry?” | `QUERY implemented(type_to_replace_after_rejection)` |
-| 13 | 36.8% | “Ok. Good. I wasnt aware we had so many agents.mds - are they all indexed somewhere?” | `ACK behavior; QUERY index(all_AGENTS.md)` |
-| 14 | 44.0% | “are the global codex workspace instructions currently compiled at session invocation from a federated typed reference registry?” | `QUERY boot_context := compile(federated_typed_refs, session_invocation)` |
-| 15 | 44.3% | “are there receipts for the inputs and outputs of each compiler invocation that we can inspect within a log?” | `QUERY observable_receipts(compiler.input, compiler.output)` |
-| 16 | 45.7% | “are these up to date and complete? For what agents/UIDs/sessions does the compiler currently work?” | `QUERY compiler_coverage(freshness, completeness, principals, sessions)` |
-| 17 | 48.3% | Asked what the compiler produced for a recently spawned Claude session and proposed kernels for persistent work with compilers for delegates. | `INSPECT compile_output(delegate_session); PROPOSE persistent=>kernel, delegate=>compiler` |
-| 18 | 51.1% | Asked whether Grok Cockpit's Delegation API work was visible; directed compiler-first support for delegates and kernel-based context for persistent Codex/Claude agents. | `ALIGN compiler -> delegates_first; persistent_agents -> kernel_using(delegates)` |
-| 19 | 53.0% | “how will this work with AgentIdentityV2 so the delegates are actually able to do work?” | `QUERY delegate_execution(authority=AgentIdentityV2)` |
-| 20 | 57.6% | “whats left thats unfinished as far as the Dr. Mulden assignment?” | `QUERY remaining(class_assignment)` |
-| 21 | 57.7% | “Yes, Hulden, my typo” | `CORRECT instructor_name(Mulden -> Hulden)` |
-| 22 | 58.6% | Supplied the complete instructor assignment: dedicated directory, live Git and per-turn commits, maintained `AGENTS.md`, plan before code, create/pull a GitHub project, test iteratively, push, publish with GitHub Pages, and submit both links plus comments. | `REQUIRE assignment(dedicated_repo, live_git, per_turn_commits, maintain_AGENTS, plan_then_code, test_loop, push_GitHub, deploy_Pages, submit=[repo_url, pages_url, comments])` |
-| 23 | 58.9% | Asked to locate an existing GitHub token through derived events, place it in the vault, and use it correctly. | `REQUEST credential_flow(find_via_derived_events -> vault -> scoped_use)` |
-| 24 | 72.3% | Rejected the school-linked credential and selected a different GitHub account email `[email redacted]`. | `SELECT github_identity(personal_account) NOT school_account` |
-| 25 | 72.4% | “it expired i need a new one” | `REPORT credential(expired); REQUIRE credential(new)` |
-| 26 | 72.5% | “all set” | `SIGNAL credential_setup_complete` |
-| 27 | 73.0% | “all set” | `SIGNAL account_setup_complete` |
-| 28 | 77.5% | “yes go ahead” | `APPROVE proposed_publication_step` |
-| 29 | 79.9% | “yes” | `APPROVE proposed_followup_step` |
-| 30 | 86.2% | “overrite anti restart api.” | `REQUEST change(anti_restart_policy)` |
-| 31 | 89.4% | “lets change the sudo policy” | `REQUEST change(sudo_policy)` |
-| 32 | 89.4% | Shared a failed policy-install command where editor-inserted line breaks separated required arguments. | `REPORT failure(command_wrapped -> argument_split + command_not_found)` |
-| 33 | 89.5% | Shared a second failed attempt with the path and hash split across lines, then asked “good?” | `REPORT failure(retry_wrapped); QUERY success?` |
-| 34 | 89.5% | “dude why dont agents get this” | `REPORT recurring_agent_instruction_failure(frustration=high)` |
-| 35 | 89.5% | Explained that VS Code—not the operator—was inserting the breaks and required agents to know this globally. | `ASSERT cause=editor_auto_wrap NOT operator; REQUIRE global_awareness` |
-| 36 | 90.0% | “we need global context repair so agents stop doing this to me” | `REQUIRE repair(global_context, prevent_wrapped_commands)` |
-| 37 | 90.1% | Asked for a quoted or EOF-encased form that could be pasted as a whole. | `REQUEST robust_paste(format=quoted_or_heredoc)` |
-| 38 | 90.4% | `[private screenshot URL] seems like it hung it never returned the cursor` | `REPORT suspected_hang(heredoc, cursor_not_returned)` |
-| 39 | 90.7% | “this looks like its hanging too: [private screenshot URL]” | `REPORT suspected_hang(retry)` |
-| 40 | 91.1% | “Done. There we go that worked. This is how you should instruct agents to do this in global context.” | `VERIFY robust_paste=PASS; REQUIRE encode_as_global_agent_guidance` |
-| 41 | 91.4% | “that was a blocker, now what is the list of ordered priorities?” | `RESOLVE blocker; QUERY ordered_priorities()` |
-| 42 | 91.7% | “Continue end to end” | `DIRECT execute_remaining_pipeline(until=verified_public_deployment)` |
+| 1 | 1.0% | Full game-design prompt reproduced above. | `MAKE HTML_GAME(rows=3..8, bank=6, exact_hidden_answer, carry_forward, distractors, hints=[remove_distractor, reveal_1, reveal_2], attractive_ui)` |
+| 2 | 14.9% | Supplied two chalkboard mockup photos through Taildrop. | `PROVIDE visual_reference(chalkboard_photos=2)` |
+| 3 | 15.1% | Corrected “taildorp” to “taildrop.” | `CORRECT asset_channel(taildrop)` |
+| 4 | 38.2% | “Let me know when I have a link to test” | `REQUEST deliver(test_url)` |
+| 5 | 53.7% | “status?” | `QUERY game_build_progress()` |
+| 6 | 55.1% | Supplied a screenshot of the in-progress game. | `PROVIDE evidence(game_ui)` |
+| 7 | 68.5% | Requested automatic checking without Enter or Submit. | `REQUIRE auto_check(full_guess)` |
+| 8 | 70.1% | Requested a visible list of previous attempts. | `REQUIRE show(previous_failed_attempts)` |
+| 9 | 91.7% | Reported that typing after a rejected full guess should clear it and begin the next attempt. | `REQUIRE rejected_full_guess + next_letter -> clear_then_start(next_guess)` |
+| 10 | 95.8% | Asked for confirmation that type-to-replace had been implemented. | `QUERY implemented(type_to_replace_after_rejection)` |
 
-The remaining 8.3% of non-reused token work occurred after message 42: the agent completed the governed commit, pushed the repository, configured and checked GitHub Pages, updated the project plan, and verified the live game. This ledger also makes the detour visible: messages 13–21 concern the context compiler and delegate architecture rather than Letter Carry itself, while messages 30–40 repair a publication-policy and command-pasting blocker. They belong in the end-to-end transcript but not in the narrower direct game-building telemetry below.
+The remaining 4.2% of this slice completed verification and reported the behavior. The later five-message regression investigation is kept separately in the debugging addendum below and is included in the combined scoped total.
 
 ## Direct game-building telemetry
 
@@ -120,6 +86,7 @@ These measurements cover only the four direct game-building intervals: the initi
 | --- | ---: |
 | Active working time | 43 m 06 s |
 | Active agent turns | 4 |
+| Game-scoped operator messages | 10 |
 | Operator product inputs | 5 |
 | Manual gameplay refinements after the initial brief | 3 |
 | Uncached input tokens | 811,098 |
@@ -136,6 +103,52 @@ The session substrate keeps an append-only transcript with timestamps, task boun
 Token figures are sums of `last_token_usage` records inside those same four intervals, so compaction resets in the cumulative counter cannot distort the result. One legacy event reported 15,595 total tokens without a category breakdown; it is included only in raw processed volume. “Raw processed” is not the same as newly authored content: tool-driven agents repeatedly send their context, and 95.90% of the measured input was cache-served. The more intuitive fresh-work figure is **897,611 non-reused input plus output tokens**.
 
 The runtime receipt exposes token traffic but no defensible billed **USD** amount. This ran in a subscription Codex session rather than as a directly metered API request, and cached-input pricing cannot be inferred safely from the transcript. The table therefore reports reproducible traffic, not an invented dollar charge.
+
+## Post-deployment debugging addendum
+
+The four-interval baseline above ends after the first behavior confirmation, before deployment and later testing. A later testing session exposed one more edge case in **type-to-replace**. This separate slice begins with the operator's first stuck-input report at 23:26:34 UTC and ends with the verified local fix commit at 23:36:01 UTC on August 21, 2026. It does not include this README request.
+
+Across the original build/refinement slice and this debugging slice, the derived Letter Carry totals are **50 m 34 s active work**, **15 game-scoped operator messages**, and **1,007,845 non-reused input-plus-output tokens**. The combined raw processed volume is 23,794,924 tokens, of which 22,750,336 were cache-served input traffic (96.16% of input).
+
+| Measure | Result |
+| --- | ---: |
+| Active debugging time | 7 m 29 s |
+| Active agent turns | 4 |
+| Operator debugging inputs | 5 |
+| Model-response/tool cycles with token receipts | 33 |
+| Uncached input tokens | 96,792 |
+| Output tokens | 13,442 |
+| Non-reused input + output | 110,234 |
+| Cached input traffic | 3,785,856 (97.51% of input) |
+| Raw processed token volume | 3,917,238 |
+| Reasoning tokens | 5,729 (included in output) |
+| Code copies compared | 3: local, GitHub `main`, and the live served file |
+| Keyboard branches reproduced | 2: already-used letter and unused letter |
+| Changed files | 2: `app.js` and `verify_game.py` |
+| Fix commit | `dbc69bd1e1584cbf90e9027c1a90e78ea10bf4ab` |
+
+### Extra debugging steps
+
+1. Compared the local, GitHub `main`, and publicly served `app.js` hashes. They matched, ruling out deployment drift and proving that later README commits had not changed the game logic.
+2. Inspected the commit history and the two relevant input functions. `selectTile()` knew how to clear a full rejected guess, but `chooseByKeyboard()` discarded a key when its tile was still selected, so the clearing code never ran.
+3. Reproduced both branches in a browser. After a rejected word, an unused letter correctly started over, while a letter already present in the rejected word did nothing.
+4. Corrected the operation order: clear the rejected unlocked guess first, then look up and insert the typed tile. Locked hint letters remain protected.
+5. Extended the Playwright verifier to exercise both the already-used-letter and unused-letter branches. The previous test covered only the unused distractor branch, which explains why the defect survived the first acceptance run.
+6. Ran `deno check app.js`, the complete browser verifier, `git diff --check`, and the governed pre-commit acceptance evaluator. All passed before the two-file fix was committed.
+
+### Debugging input ledger
+
+The token stage below is relative to the 110,234 non-reused tokens in this debugging slice. As in the main ledger, it marks the first model response that could incorporate each operator input; it does not claim that the message alone consumed that percentage.
+
+| # | Token stage | Public-safe operator input | Symbolic English |
+| ---: | ---: | --- | --- |
+| 1 | 1.5% | Reported that typing after a rejected full word no longer started a new attempt and asked how the regression happened. | `REPORT stuck(type_after_rejection); QUERY cause(regression)` |
+| 2 | 3.2% | Suggested that connectivity might explain the observation. | `HYPOTHESIZE cause=connectivity` |
+| 3 | 5.0% | With a screenshot, rejected the connectivity hypothesis and confirmed that input was still stuck. | `FALSIFY connectivity; PROVIDE evidence(stuck_input)` |
+| 4 | 9.6% | “please investigate” | `DIRECT diagnose(root_cause)` |
+| 5 | 20.6% | Confirmed the diagnosis and requested the fix and commit. | `APPROVE diagnosis; DIRECT fix + test + commit` |
+
+The remaining 79.4% of non-reused work covered reproduction, source/history comparison, protocol-scoped editing, static and browser verification, commit-authority evaluation, and final readback. One runtime record contained 21,148 total tokens without a category breakdown; it is included only in raw processed volume. Active time sums each debugging turn from `task_started` to `task_complete`, using the next `task_started` boundary for the one superseded turn, so idle gaps between operator messages are excluded.
 
 ## What the substrate contributed
 
