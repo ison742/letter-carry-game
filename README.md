@@ -137,6 +137,50 @@ Token figures are sums of `last_token_usage` records inside those same four inte
 
 The runtime receipt exposes token traffic but no defensible billed **USD** amount. This ran in a subscription Codex session rather than as a directly metered API request, and cached-input pricing cannot be inferred safely from the transcript. The table therefore reports reproducible traffic, not an invented dollar charge.
 
+## Post-deployment debugging addendum
+
+The original measurements above deliberately stop at the first verified public deployment. A later testing session exposed one more edge case in **type-to-replace**. This separate slice begins with the operator's first stuck-input report at 23:26:34 UTC and ends with the verified local fix commit at 23:36:01 UTC on August 21, 2026. It does not include this README request.
+
+| Measure | Result |
+| --- | ---: |
+| Active debugging time | 7 m 29 s |
+| Active agent turns | 4 |
+| Operator debugging inputs | 5 |
+| Model-response/tool cycles with token receipts | 33 |
+| Uncached input tokens | 96,792 |
+| Output tokens | 13,442 |
+| Non-reused input + output | 110,234 |
+| Cached input traffic | 3,785,856 (97.51% of input) |
+| Raw processed token volume | 3,917,238 |
+| Reasoning tokens | 5,729 (included in output) |
+| Code copies compared | 3: local, GitHub `main`, and the live served file |
+| Keyboard branches reproduced | 2: already-used letter and unused letter |
+| Changed files | 2: `app.js` and `verify_game.py` |
+| Fix commit | `dbc69bd1e1584cbf90e9027c1a90e78ea10bf4ab` |
+
+### Extra debugging steps
+
+1. Compared the local, GitHub `main`, and publicly served `app.js` hashes. They matched, ruling out deployment drift and proving that later README commits had not changed the game logic.
+2. Inspected the commit history and the two relevant input functions. `selectTile()` knew how to clear a full rejected guess, but `chooseByKeyboard()` discarded a key when its tile was still selected, so the clearing code never ran.
+3. Reproduced both branches in a browser. After a rejected word, an unused letter correctly started over, while a letter already present in the rejected word did nothing.
+4. Corrected the operation order: clear the rejected unlocked guess first, then look up and insert the typed tile. Locked hint letters remain protected.
+5. Extended the Playwright verifier to exercise both the already-used-letter and unused-letter branches. The previous test covered only the unused distractor branch, which explains why the defect survived the first acceptance run.
+6. Ran `deno check app.js`, the complete browser verifier, `git diff --check`, and the governed pre-commit acceptance evaluator. All passed before the two-file fix was committed.
+
+### Debugging input ledger
+
+The token stage below is relative to the 110,234 non-reused tokens in this debugging slice. As in the main ledger, it marks the first model response that could incorporate each operator input; it does not claim that the message alone consumed that percentage.
+
+| # | Token stage | Public-safe operator input | Symbolic English |
+| ---: | ---: | --- | --- |
+| 1 | 1.5% | Reported that typing after a rejected full word no longer started a new attempt and asked how the regression happened. | `REPORT stuck(type_after_rejection); QUERY cause(regression)` |
+| 2 | 3.2% | Suggested that connectivity might explain the observation. | `HYPOTHESIZE cause=connectivity` |
+| 3 | 5.0% | With a screenshot, rejected the connectivity hypothesis and confirmed that input was still stuck. | `FALSIFY connectivity; PROVIDE evidence(stuck_input)` |
+| 4 | 9.6% | “please investigate” | `DIRECT diagnose(root_cause)` |
+| 5 | 20.6% | Confirmed the diagnosis and requested the fix and commit. | `APPROVE diagnosis; DIRECT fix + test + commit` |
+
+The remaining 79.4% of non-reused work covered reproduction, source/history comparison, protocol-scoped editing, static and browser verification, commit-authority evaluation, and final readback. One runtime record contained 21,148 total tokens without a category breakdown; it is included only in raw processed volume. Active time sums each debugging turn from `task_started` to `task_complete`, using the next `task_started` boundary for the one superseded turn, so idle gaps between operator messages are excluded.
+
 ## What the substrate contributed
 
 Here, **substrate** means the agent runtime around the coding model—not the game framework. It supplied identity, scoped work protocols, credential brokering, governed Git commits, append-only telemetry, and independent acceptance checks.
